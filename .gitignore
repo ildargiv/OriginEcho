@@ -8,6 +8,11 @@ tools/__pycache__/
 __pycache__/
 *.pyc
 
+# сборка PyInstaller (но скрипт иконки коммитим)
+build/*
+!build/make_icon.py
+dist/
+
 # ОС и редакторы
 .DS_Store
 Thumbs.db

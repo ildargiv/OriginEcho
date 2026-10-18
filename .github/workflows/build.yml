@@ -1,0 +1,99 @@
+name: build
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Тег для публикации релиза (пусто — только артефакт)"
+        required: false
+        default: "v1.0.0"
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Get exiftool
+        shell: pwsh
+        run: |
+          $ver = "13.59"
+          $zip = "$env:RUNNER_TEMP\exiftool.zip"
+          $url = "https://downloads.sourceforge.net/project/exiftool/exiftool-$($ver)_64.zip"
+          foreach ($i in 1..5) {
+            try {
+              Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing -TimeoutSec 180
+              break
+            } catch {
+              Write-Host "попытка $i не удалась: $_"
+              Start-Sleep 15
+            }
+          }
+          if (-not (Test-Path $zip)) { throw "не удалось скачать exiftool" }
+          $tmp = "$env:RUNNER_TEMP\et"
+          Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
+          Expand-Archive $zip -DestinationPath $tmp -Force
+          $found = Get-ChildItem $tmp -Recurse -Filter exiftool.exe | Select-Object -First 1
+          if (-not $found) { throw "exiftool.exe не найден в архиве" }
+          $dest = "tools\exiftool\exiftool-$($ver)_64"
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          Copy-Item "$($found.DirectoryName)\*" $dest -Recurse -Force
+          Write-Host "exiftool готов: $dest"
+
+      - name: Build OriginEcho.exe
+        run: pyinstaller OriginEcho.spec --noconfirm --clean
+
+      - name: Compile installer (Inno Setup)
+        shell: pwsh
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { $iscc = (Get-Command ISCC.exe -ErrorAction Stop).Source }
+          & $iscc installer\OriginEcho.iss
+          Get-ChildItem dist | Format-Table Name, Length
+
+      - name: Smoke test (exe запускается)
+        shell: pwsh
+        run: |
+          $p = Start-Process dist\OriginEcho.exe -PassThru
+          Start-Sleep 12
+          if ($p.HasExited) { throw "OriginEcho.exe упал сразу после запуска" }
+          Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
+          Write-Host "exe живой, окно поднялось"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: OriginEcho-windows
+          path: |
+            dist/OriginEcho.exe
+            dist/OriginEcho-Setup-*.exe
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/') || inputs.tag != ''
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          INPUT_TAG: ${{ inputs.tag }}
+        run: |
+          $tag = if ("${{ github.ref }}" -like "refs/tags/*") { "${{ github.ref_name }}" } else { $env:INPUT_TAG }
+          if (-not $tag) { Write-Host "нет тега — пропуск"; exit 0 }
+          gh release view $tag 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --title "OriginEcho $tag" --notes "Windows build: installer + portable exe."
+          }
+          gh release upload $tag (Get-Item dist/OriginEcho.exe, dist/OriginEcho-Setup-*.exe).FullName --clobber
+          Write-Host "релиз $tag обновлён"

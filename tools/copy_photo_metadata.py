@@ -38,10 +38,13 @@ IMG_EXT = set(WRITABLE) | {".heic", ".cr2", ".cr3", ".arw", ".nef", ".dng"}
 
 
 def find_exiftool():
-    """Ищет exiftool.exe: в папках проекта, рядом и в PATH."""
+    """Ищет exiftool.exe: рядом с программой, в папках проекта и в PATH."""
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # корень проекта
     here = os.path.dirname(os.path.abspath(__file__))
-    for base in (root, here):
+    bases = [root, here]
+    if getattr(sys, "frozen", False):  # собрано в exe (PyInstaller)
+        bases.insert(0, os.path.dirname(os.path.abspath(sys.executable)))
+    for base in bases:
         for dirpath, _, files in os.walk(base):
             if os.path.basename(dirpath).startswith(".git"):
                 continue

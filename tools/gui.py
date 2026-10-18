@@ -16,7 +16,26 @@ from copy_photo_metadata import (collect_pairs, process_folders, raw_exif,
 import i18n
 from i18n import t as T, LANGS, DEFAULT_LANG, font_family
 
-CONFIG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lang.cfg")
+def _app_dir():
+    """Папка для настроек/лога: рядом с программой; в замороженном exe —
+    папка рядом с ним, а если она защищена (Program Files) — LocalAppData."""
+    if getattr(sys, "frozen", False):
+        base = os.path.dirname(os.path.abspath(sys.executable))
+        try:
+            probe = os.path.join(base, ".wtest")
+            with open(probe, "w", encoding="utf-8") as fh:
+                fh.write("ok")
+            os.remove(probe)
+            return base
+        except Exception:
+            d = os.path.join(os.environ.get("LOCALAPPDATA") or os.path.expanduser("~"),
+                             "OriginEcho")
+            os.makedirs(d, exist_ok=True)
+            return d
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+CONFIG = os.path.join(_app_dir(), "lang.cfg")
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -24,7 +43,7 @@ try:
 except Exception:
     DND = False
 
-LOG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "errors.log")
+LOG_FILE = os.path.join(_app_dir(), "errors.log")
 
 BG, PANEL, PANEL2 = "#101318", "#171b22", "#1c2129"
 LINE = "#2a303a"

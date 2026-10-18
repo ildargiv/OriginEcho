@@ -13,6 +13,19 @@ format and names the result for you.
 
 ---
 
+## ⬇️ Download
+
+**[Latest release — OriginEcho](https://github.com/ildargiv/OriginEcho/releases/latest)**
+
+| File | For whom |
+|---|---|
+| `OriginEcho-Setup-*.exe` | Windows installer — recommended, install and run |
+| `OriginEcho.exe` | portable version — just download and double-click |
+
+Windows 10/11 (64-bit). **Python is not required** — everything is included.
+
+---
+
 ## What it does
 
 | | |
