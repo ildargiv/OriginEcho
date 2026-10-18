@@ -15,6 +15,8 @@ It also runs as an **MCP server** — AI assistants like Claude Desktop, OpenCod
 or Cursor can restore the metadata for you in plain language, see
 [AI agents (MCP)](#ai-agents-mcp).
 
+![OriginEcho window: restore metadata in one click](docs/screenshot.png)
+
 ---
 
 ## ⬇️ Download
