@@ -29,31 +29,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
 
-      - name: Get exiftool
+      - name: Check bundled exiftool
         shell: pwsh
         run: |
-          $ver = "13.59"
-          $zip = "$env:RUNNER_TEMP\exiftool.zip"
-          $url = "https://downloads.sourceforge.net/project/exiftool/exiftool-$($ver)_64.zip"
-          foreach ($i in 1..5) {
-            try {
-              Invoke-WebRequest -Uri $url -OutFile $zip -UseBasicParsing -TimeoutSec 180
-              break
-            } catch {
-              Write-Host "попытка $i не удалась: $_"
-              Start-Sleep 15
-            }
-          }
-          if (-not (Test-Path $zip)) { throw "не удалось скачать exiftool" }
-          $tmp = "$env:RUNNER_TEMP\et"
-          Remove-Item $tmp -Recurse -Force -ErrorAction SilentlyContinue
-          Expand-Archive $zip -DestinationPath $tmp -Force
-          $found = Get-ChildItem $tmp -Recurse -Filter exiftool.exe | Select-Object -First 1
-          if (-not $found) { throw "exiftool.exe не найден в архиве" }
-          $dest = "tools\exiftool\exiftool-$($ver)_64"
-          New-Item -ItemType Directory -Force $dest | Out-Null
-          Copy-Item "$($found.DirectoryName)\*" $dest -Recurse -Force
-          Write-Host "exiftool готов: $dest"
+          $e = Get-ChildItem tools\exiftool -Recurse -Filter exiftool.exe -ErrorAction SilentlyContinue |
+               Select-Object -First 1
+          if (-not $e) { throw "exiftool.exe не найден в репозитории (tools/exiftool)" }
+          Write-Host "exiftool: $($e.FullName)"
 
       - name: Build OriginEcho.exe
         run: pyinstaller OriginEcho.spec --noconfirm --clean
