@@ -70,6 +70,41 @@ python tools/copy_photo_metadata.py --folder ORIGINALS_DIR EDITED_DIR
 
 Flags: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## AI agents (MCP)
+
+OriginEcho can run as an **MCP server** (Model Context Protocol), so AI assistants —
+Claude Desktop, OpenCode, Cursor and similar — can restore metadata for you in plain
+language.
+
+Run the same `OriginEcho.exe` with the `--mcp` flag (stdio transport, local only,
+no ports and no network traffic):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+From source: `"command": "python", "args": ["C:\\path\\to\\tools\\mcp_server.py"]`.
+
+Tools the agent gets:
+
+| Tool | What it does |
+|---|---|
+| `photo_info` | Read the shooting history of a file (camera, date, ISO, GPS...) |
+| `restore_metadata` | Copy EXIF/XMP/IPTC/ICC from the original onto an edited photo |
+| `process_folders` | Batch-process two folders |
+| `supported_formats` | List supported formats |
+| `app_info` | Version and component check |
+
+Example prompt: *"Transfer the metadata from IMG_20261017_142755.jpg to every photo
+in the Edited folder."*
+
 ## Supported languages
 
 The interface is available in **11 languages** — pick one in the top-right corner

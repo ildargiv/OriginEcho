@@ -1,11 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
-"""Сборка OriginEcho.exe (PyInstaller, один файл, без консоли).
+"""Сборка OriginEcho.exe (PyInstaller, один файл).
 
     pyinstaller OriginEcho.spec --noconfirm --clean
 
 exiftool кладётся внутрь exe (tools/exiftool), tkinterdnd2 — вместе с
 файлами tkdnd (только Windows-сборки, Linux/macOS отбрасываем).
-"""
+
+Консоль включена: stdio-транспорту режима --mcp (MCP-сервер для ИИ-агентов)
+нужны настоящие stdin/stdout. В GUI-режиме окно консоли скрывается сразу
+по запуска (см. main() в gui.py)."""
 from PyInstaller.utils.hooks import collect_data_files
 
 SPECDIR = SPECPATH

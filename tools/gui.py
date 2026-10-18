@@ -389,11 +389,25 @@ class App:
 
 
 def main():
+    # exe собирается с консолью (нужно для режима --mcp), но в GUI-режиме
+    # окно консоли сразу скрываем, чтобы двойной клик давал «чистое» окно
+    if getattr(sys, "frozen", False):
+        try:
+            import ctypes
+            h = ctypes.windll.kernel32.GetConsoleWindow()
+            if h:
+                ctypes.windll.user32.ShowWindow(h, 0)  # SW_HIDE
+        except Exception:
+            pass
     root = TkinterDnD.Tk() if DND else tk.Tk()
     App(root)
     root.mainloop()
 
 
 if __name__ == "__main__":
+    if "--mcp" in sys.argv:
+        # режим MCP-сервера для ИИ-агентов: OriginEcho.exe --mcp (stdio)
+        import mcp_server
+        sys.exit(mcp_server.main())
     main()
 

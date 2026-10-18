@@ -2,7 +2,7 @@
 ; Компиляция: ISCC.exe installer\OriginEcho.iss
 ; (в GitHub Actions ISCC предустановлен на windows-latest)
 #define MyAppName "OriginEcho"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "OriginEcho"
 #define MyAppURL "https://github.com/ildargiv/OriginEcho"
 #define MyAppExeName "OriginEcho.exe"

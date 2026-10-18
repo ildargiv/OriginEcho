@@ -70,6 +70,40 @@ python tools/copy_photo_metadata.py --folder ПАПКА_ОРИГИНАЛОВ П�
 
 Флаги: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## ИИ-агенты (MCP)
+
+OriginEcho умеет работать **MCP-сервером** (Model Context Protocol): ИИ-ассистенты —
+Claude Desktop, OpenCode, Cursor и другие — смогут восстанавливать метаданные
+в обычном разговоре.
+
+Запустите тот же `OriginEcho.exe` с флагом `--mcp` (транспорт stdio, только локально,
+без портов и сетевого трафика):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+Из исходников: `"command": "python", "args": ["C:\\путь\\к\\tools\\mcp_server.py"]`.
+
+Инструменты, которые увидит агент:
+
+| Инструмент | Что делает |
+|---|---|
+| `photo_info` | Прочитать историю съёмки файла (камера, дата, ISO, GPS...) |
+| `restore_metadata` | Перенести EXIF/XMP/IPTC/ICC с оригинала на обработанное фото |
+| `process_folders` | Пакетная обработка двух папок |
+| `supported_formats` | Список поддерживаемых форматов |
+| `app_info` | Версия и проверка компонентов |
+
+Пример запроса: «Перенеси метаданные с IMG_20261017_142755.jpg на все фото в папке Edited».
+
 ## Поддерживаемые языки
 
 Интерфейс доступен на **11 языках** — выберите в правом верхнем углу окна,
