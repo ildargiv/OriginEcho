@@ -1,0 +1,15 @@
+# exiftool — большой бинарник (~11 МБ), не коммитим
+tools/exiftool/
+
+# рабочие файлы программы
+tools/errors.log
+tools/lang.cfg
+tools/__pycache__/
+__pycache__/
+*.pyc
+
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
