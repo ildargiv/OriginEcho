@@ -56,6 +56,39 @@ python tools/copy_photo_metadata.py --folder ORIGINALS EDITED_FOLDER
 
 플래그: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## AI 에이전트 (MCP)
+
+OriginEcho는 **MCP 서버**(Model Context Protocol)로 동작할 수 있어, AI 비서 —
+Claude Desktop, OpenCode, Cursor 등 — 가 자연어로 메타데이터를 복원할 수 있습니다.
+
+같은 `OriginEcho.exe`에 `--mcp` 플래그를 붙여 실행하세요(stdio 전송, 로컬 전용,
+포트와 네트워크 트래픽 없음):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+소스에서 실행: `"command": "python", "args": ["C:\\path\\to\\tools\\mcp_server.py"]`
+
+에이전트가 사용하는 도구:
+
+| 도구 | 기능 |
+|---|---|
+| `photo_info` | 파일의 촬영 기록 읽기(카메라, 날짜, ISO, GPS...) |
+| `restore_metadata` | 원본에서 편집된 사진으로 EXIF/XMP/IPTC/ICC 복사 |
+| `process_folders` | 두 폴더 일괄 처리 |
+| `supported_formats` | 지원 형식 나열 |
+| `app_info` | 버전 및 구성 요소 확인 |
+
+예시: "IMG_20261017_142755.jpg의 메타데이터를 Edited 폴더의 모든 사진으로 옮겨줘."
+
 ## 지원 언어
 
 인터페이스는 **11개 언어**로 제공됩니다 — 오른쪽 위에서 선택하세요. 선택은

@@ -11,6 +11,10 @@ stripped away. The picture looks the same, but its story is gone.
 metadata onto the AI-edited image — and, optionally, restores the original file
 format and names the result for you.
 
+It also runs as an **MCP server** — AI assistants like Claude Desktop, OpenCode
+or Cursor can restore the metadata for you in plain language, see
+[AI agents (MCP)](#ai-agents-mcp).
+
 ---
 
 ## ⬇️ Download

@@ -57,6 +57,40 @@ python tools/copy_photo_metadata.py --folder ORIJINALLER KLASORU DuzENLENMISLER
 
 Bayraklar: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## Yapay zeka ajanları (MCP)
+
+OriginEcho, **MCP sunucusu** (Model Context Protocol) olarak çalışabilir; böylece
+yapay zeka asistanları — Claude Desktop, OpenCode, Cursor vb. — meta verileri
+doğal dille geri yükleyebilir.
+
+Aynı `OriginEcho.exe` dosyasını `--mcp` bayrağıyla başlatın (stdio taşıma, yalnızca
+yerel; port ve ağ trafiği yok):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+Kaynak koddan: `"command": "python", "args": ["C:\\yol\\tools\\mcp_server.py"]`.
+
+Ajanın araçları:
+
+| Araç | Ne yapar |
+|---|---|
+| `photo_info` | Dosyanın çekim geçmişini okur (kamera, tarih, ISO, GPS...) |
+| `restore_metadata` | EXIF/XMP/IPTC/ICC bilgisini orijinalden düzenlenen fotoğrafa kopyalar |
+| `process_folders` | İki klasörü toplu işler |
+| `supported_formats` | Desteklenen biçimleri listeler |
+| `app_info` | Sürüm ve bileşen denetimi |
+
+Örnek: «IMG_20261017_142755.jpg dosyasındaki meta verileri Edited klasöründeki tüm fotoğraflara aktar.»
+
 ## Desteklenen diller
 
 Arayüz **11 dilde** kullanılabilir — sağ üst köşeden birini seçin; seçiminiz

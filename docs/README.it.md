@@ -58,6 +58,40 @@ python tools/copy_photo_metadata.py --folder CARTELLA_ORIGINALI CARTELLA_MODIFIC
 
 Opzioni: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## Agenti IA (MCP)
+
+OriginEcho può funzionare come **server MCP** (Model Context Protocol), così gli
+assistenti IA — Claude Desktop, OpenCode, Cursor e simili — possono ripristinare
+i metadati in linguaggio naturale.
+
+Avvia lo stesso `OriginEcho.exe` con il flag `--mcp` (trasporto stdio, solo locale,
+nessuna porta né traffico di rete):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+Dai sorgenti: `"command": "python", "args": ["C:\\percorso\\tools\\mcp_server.py"]`.
+
+Strumenti a disposizione:
+
+| Strumento | Cosa fa |
+|---|---|
+| `photo_info` | Legge la cronologia di scatto di un file (fotocamera, data, ISO, GPS...) |
+| `restore_metadata` | Copia EXIF/XMP/IPTC/ICC dall'originale alla foto modificata |
+| `process_folders` | Elabora due cartelle in blocco |
+| `supported_formats` | Elenca i formati supportati |
+| `app_info` | Versione e controllo dei componenti |
+
+Esempio: «Trasferisci i metadati di IMG_20261017_142755.jpg su tutte le foto nella cartella Edited».
+
 ## Lingue supportate
 
 L’interfaccia è disponibile in **11 lingue** — scegline una nell’angolo in alto a

@@ -57,6 +57,40 @@ python tools/copy_photo_metadata.py --folder FOLDER_ASLI FOLDER_DIEDIT
 
 Bendera: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## Agen AI (MCP)
+
+OriginEcho dapat berjalan sebagai **server MCP** (Model Context Protocol), sehingga
+asisten AI — Claude Desktop, OpenCode, Cursor, dll. — dapat memulihkan metadata
+dengan bahasa sehari-hari.
+
+Jalankan `OriginEcho.exe` yang sama dengan flag `--mcp` (transportasi stdio, hanya
+lokal, tanpa port atau lalu lintas jaringan):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+Dari kode sumber: `"command": "python", "args": ["C:\\jalur\\ke\\tools\\mcp_server.py"]`.
+
+Alat yang tersedia:
+
+| Alat | Fungsi |
+|---|---|
+| `photo_info` | Membaca riwayat pemotretan sebuah file (kamera, tanggal, ISO, GPS...) |
+| `restore_metadata` | Menyalin EXIF/XMP/IPTC/ICC dari foto asli ke foto hasil editan |
+| `process_folders` | Memproses dua folder secara massal |
+| `supported_formats` | Menampilkan format yang didukung |
+| `app_info` | Versi dan pemeriksaan komponen |
+
+Contoh: «Pindahkan metadata dari IMG_20261017_142755.jpg ke semua foto di folder Edited».
+
 ## Bahasa yang didukung
 
 Antarmuka tersedia dalam **11 bahasa** — pilih di sudut kanan atas; pilihan Anda

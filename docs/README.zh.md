@@ -54,6 +54,39 @@ python tools/copy_photo_metadata.py --folder ORIGINALS_DIR EDITED_DIR
 
 选项：`--no-icc`、`--no-dates`、`--no-convert`、`--no-rename`、`--keep-old`。
 
+## AI 智能体 (MCP)
+
+OriginEcho 可以作为 **MCP 服务器**（Model Context Protocol）运行，让 AI 助手
+—— Claude Desktop、OpenCode、Cursor 等 —— 用自然语言恢复元数据。
+
+以 `--mcp` 标志启动同一个 `OriginEcho.exe`（stdio 传输，仅本地，不开放端口、
+不产生网络流量）：
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+从源码运行：`"command": "python", "args": ["C:\\path\\to\\tools\\mcp_server.py"]`
+
+智能体可用的工具：
+
+| 工具 | 作用 |
+|---|---|
+| `photo_info` | 读取文件的拍摄记录（相机、日期、ISO、GPS……） |
+| `restore_metadata` | 将 EXIF/XMP/IPTC/ICC 从原图复制到已编辑照片 |
+| `process_folders` | 批量处理两个文件夹 |
+| `supported_formats` | 列出支持的格式 |
+| `app_info` | 版本与组件检查 |
+
+示例：「把 IMG_20261017_142755.jpg 的元数据移到 Edited 文件夹的所有照片上。」
+
 ## 支持的语言
 
 界面提供 **11 种语言** —— 在窗口右上角选择，选择会被记住：

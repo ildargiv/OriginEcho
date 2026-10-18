@@ -57,6 +57,40 @@ python tools/copy_photo_metadata.py --folder ORIGINALS FOLDER EDITED
 
 फ़्लैग: `--no-icc`, `--no-dates`, `--no-convert`, `--no-rename`, `--keep-old`.
 
+## AI एजेंट (MCP)
+
+OriginEcho **MCP सर्वर** (Model Context Protocol) के रूप में चल सकता है, ताकि
+AI सहायक — Claude Desktop, OpenCode, Cursor आदि — सामान्य भाषा में मेटाडेटा
+बहाल कर सकें।
+
+वही `OriginEcho.exe` `--mcp` फ़्लैग के साथ चलाएँ (stdio ट्रांसपोर्ट, केवल स्थानीय,
+कोई पोर्ट या नेटवर्क ट्रैफ़िक नहीं):
+
+```json
+{
+  "mcpServers": {
+    "originecho": {
+      "command": "C:\\Program Files\\OriginEcho\\OriginEcho.exe",
+      "args": ["--mcp"]
+    }
+  }
+}
+```
+
+स्रोत से चलाने के लिए: `"command": "python", "args": ["C:\\path\\to\\tools\\mcp_server.py"]`।
+
+सहायक के टूल:
+
+| टूल | क्या करता है |
+|---|---|
+| `photo_info` | फ़ाइल का शूटिंग इतिहास पढ़ता है (कैमरा, तिथि, ISO, GPS...) |
+| `restore_metadata` | मूल फ़ोटो से संपादित फ़ोटो पर EXIF/XMP/IPTC/ICC कॉपी करता है |
+| `process_folders` | दो फ़ोल्डर बैच में प्रोसेस करता है |
+| `supported_formats` | समर्थित फ़ॉर्मेट सूचीबद्ध करता है |
+| `app_info` | संस्करण और घटक जाँच |
+
+उदाहरण: «IMG_20261017_142755.jpg का मेटाडेटा Edited फ़ोल्डर के सभी फ़ोटो पर ले जाओ।»
+
 ## समर्थित भाषाएँ
 
 इंटरफ़ेस **11 भाषाओं** में उपलब्ध है — ऊपर-दाएँ कोने से चुनें; आपकी पसंद याद रखी
