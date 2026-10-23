@@ -1,5 +1,7 @@
 # OriginEcho
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/ildargiv/OriginEcho/blob/main/LICENSE) [![release](https://img.shields.io/github/v/release/ildargiv/OriginEcho?label=release)](https://github.com/ildargiv/OriginEcho/releases/latest) ![Windows](https://img.shields.io/badge/Windows-10%20%7C%2011-0078D4) ![MCP](https://img.shields.io/badge/MCP-server-6E4AFF) ![languages](https://img.shields.io/badge/interface-11%20languages-555)
+
 **Restore shooting history lost after AI photo editing.**
 
 When you run a photograph through an AI generator or editor, the exported file
