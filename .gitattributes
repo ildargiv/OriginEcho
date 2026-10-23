@@ -1,0 +1,10 @@
+# Bundled ExifTool distribution (ExifTool + Strawberry Perl runtime).
+# Third-party code: exclude it from GitHub language statistics so the
+# repository reports the application language (Python), not vendored Perl.
+tools/exiftool/** linguist-vendored
+tools/exiftool/** linguist-detectable=false
+
+# Binaries are not source code.
+*.exe binary
+*.ico binary
+*.png binary
