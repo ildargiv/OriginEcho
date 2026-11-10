@@ -7,8 +7,8 @@
 $ErrorActionPreference = "Stop"
 $Version = "13.59"
 $Name = "exiftool-${Version}_64"
-# SHA-256 of the zip itself, if known. Empty: only the per-file manifest is checked.
-$ZipSha256 = ""
+# SHA-256 of the official zip. The per-file manifest is checked as well.
+$ZipSha256 = "44b512b25af500724ba579d0a53c8fc5851628b692dd5e5d94ae4a15c2cba9ec"
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 $Dest = Join-Path $Here "exiftool"
 $Manifest = Join-Path $Here "exiftool.sha256"
