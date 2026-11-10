@@ -1,5 +1,6 @@
-# exiftool включён в репозиторий: нужен для воспроизводимых CI-сборок
-# и попадает внутрь exe через OriginEcho.spec
+# exiftool в репозитории не хранится: tools/fetch_exiftool.ps1 скачивает закреплённую версию
+# и сверяет каждый файл с tools/exiftool.sha256; внутрь exe он попадает через OriginEcho.spec
+tools/exiftool/
 
 # рабочие файлы программы
 tools/errors.log
