@@ -3,6 +3,7 @@ name: build
 on:
   push:
     tags: ["v*"]
+  pull_request:
   workflow_dispatch:
     inputs:
       tag:
@@ -29,13 +30,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt pyinstaller
 
-      - name: Check bundled exiftool
+      - name: Fetch ExifTool (pinned version, every file checked against tools/exiftool.sha256)
         shell: pwsh
-        run: |
-          $e = Get-ChildItem tools\exiftool -Recurse -Filter exiftool.exe -ErrorAction SilentlyContinue |
-               Select-Object -First 1
-          if (-not $e) { throw "exiftool.exe не найден в репозитории (tools/exiftool)" }
-          Write-Host "exiftool: $($e.FullName)"
+        run: ./tools/fetch_exiftool.ps1
 
       - name: Build OriginEcho.exe
         run: pyinstaller OriginEcho.spec --noconfirm --clean
@@ -57,12 +54,21 @@ jobs:
           Stop-Process -Id $p.Id -Force -ErrorAction SilentlyContinue
           Write-Host "exe живой, окно поднялось"
 
+      - name: SHA-256 checksums
+        shell: pwsh
+        run: |
+          Get-Item dist\OriginEcho.exe, dist\OriginEcho-Setup-*.exe | ForEach-Object {
+            "{0} *{1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower(), $_.Name
+          } | Set-Content dist\SHA256SUMS.txt -Encoding ascii
+          Get-Content dist\SHA256SUMS.txt
+
       - uses: actions/upload-artifact@v4
         with:
           name: OriginEcho-windows
           path: |
             dist/OriginEcho.exe
             dist/OriginEcho-Setup-*.exe
+            dist/SHA256SUMS.txt
 
       - name: Publish release
         if: startsWith(github.ref, 'refs/tags/') || inputs.tag != ''
@@ -77,5 +83,5 @@ jobs:
           if ($LASTEXITCODE -ne 0) {
             gh release create $tag --title "OriginEcho $tag" --notes "Windows build: installer + portable exe."
           }
-          gh release upload $tag (Get-Item dist/OriginEcho.exe, dist/OriginEcho-Setup-*.exe).FullName --clobber
+          gh release upload $tag (Get-Item dist/OriginEcho.exe, dist/OriginEcho-Setup-*.exe, dist/SHA256SUMS.txt).FullName --clobber
           Write-Host "релиз $tag обновлён"

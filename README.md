@@ -135,15 +135,17 @@ is installed.
   JPEG.
 - PNG and WEBP have limited support for some EXIF fields (a limitation of those
   formats, not the program). For the full record, prefer a JPEG result.
-- Full metadata (XMP/IPTC) is copied with **exiftool** (bundled in
-  `tools/exiftool`); without it the program falls back to EXIF + ICC.
+- Full metadata (XMP/IPTC) is copied with **exiftool**. The released exe and
+  installer include it. When running from source, fetch it once with
+  `powershell -ExecutionPolicy Bypass -File tools\fetch_exiftool.ps1`;
+  without it the program falls back to EXIF + ICC.
 
 ## Requirements
 
 - Python 3.11+
 - Pillow (installed automatically on first run if missing)
 - `tkinterdnd2` — for drag & drop (optional)
-- exiftool — for full XMP/IPTC (optional, bundled)
+- exiftool — for full XMP/IPTC (optional; bundled in the exe, fetched by `tools\fetch_exiftool.ps1` from source)
 
 ## Credits
 
